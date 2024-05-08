@@ -40,7 +40,6 @@ def process_tasks_to_csv():
                 writer.writerow({
                     'task_id': task['id'],
                     'policy_id': task['policy_id'],
-                    'resource_id': action['resource_id'],
                     'description': task['description'],
                     'assigned_to': task['assigned_to'],
                     'action_type': action['type'],
@@ -223,18 +222,15 @@ class ClientController:
                 
                 for action in task.get('actions', []):
                     attributes = json.dumps(action['attributes'])
-                    conditions = json.dumps(action['conditions'])
                     
                     writer.writerow({
                         'Task ID': task['id'],
                         'User Name': user_name,
                         'Policy ID': task['policy_id'],
-                        'Resource ID': task['resource_id'],  # Include Resource ID
                         'Policy Effect': policy_effect,
                         'Action Type': action['type'],
                         'Resource': action['resource'],
                         'Attributes': attributes,
-                        'Conditions': conditions,
                         'Expected Outcome': action['expected_outcome']
                     })
 
