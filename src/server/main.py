@@ -1,6 +1,8 @@
 import json
 import csv
 import logging
+import wx
+import json
 from argparse import ArgumentParser
 from collections import namedtuple
 from vakt_server import VaktServer, VaktHandler
@@ -10,6 +12,77 @@ logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s
 
 # Define a namedtuple for Policies
 Policy = namedtuple('Policy', ['id', 'effect', 'resource', 'action', 'subject', 'context'])
+
+def process_tasks_to_csv():
+    with open('config/tasks.json', 'r') as file:
+        data = json.load(file)['tasks']
+    with open('config/data.csv', 'w', newline='') as csvfile:
+        # Include all possible keys that might be present in the task dictionaries
+        fieldnames = ['id', 'policy_id', 'description', 'assigned_to', 'status', 'date_activated', 'task_name']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for task in data:
+            writer.writerow(task)
+    wx.MessageBox('Tasks processed and saved to data.csv', 'Success', wx.OK | wx.ICON_INFORMATION)
+
+class TaskInputFrame(wx.Frame):
+    def __init__(self, parent, title):
+        super(TaskInputFrame, self).__init__(parent, title=title, size=(400, 300))
+        self.InitUI()
+
+    def InitUI(self):
+        panel = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        # Task input fields setup
+        self.tc_task_id = wx.TextCtrl(panel)
+        self.tc_policy_id = wx.TextCtrl(panel)
+        self.tc_description = wx.TextCtrl(panel)
+        self.tc_assigned_to = wx.TextCtrl(panel)
+        add_button = wx.Button(panel, label='Add Task')
+        add_button.Bind(wx.EVT_BUTTON, self.on_add_task)
+        
+        process_button = wx.Button(panel, label='Process Tasks')
+        process_button.Bind(wx.EVT_BUTTON, lambda event: process_tasks_to_csv())
+
+        # Layout adjustments
+        vbox.Add(wx.StaticText(panel, label='Task ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_task_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Policy ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_policy_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Description'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_description, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Assigned To'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_assigned_to, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(add_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
+        vbox.Add(process_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
+
+        panel.SetSizer(vbox)
+
+    def on_add_task(self, event):
+        task_data = {
+            'id': self.tc_task_id.GetValue(),
+            'policy_id': self.tc_policy_id.GetValue(),
+            'description': self.tc_description.GetValue(),
+            'assigned_to': self.tc_assigned_to.GetValue()
+        }
+        self.save_task(task_data)
+        wx.MessageBox('Task Added', 'Info', wx.OK | wx.ICON_INFORMATION)
+
+    def save_task(self, task_data):
+        try:
+            with open('config/tasks.json', 'r+') as file:
+                data = json.load(file)
+                if 'tasks' not in data:
+                    data['tasks'] = []
+                data['tasks'].append(task_data)
+                file.seek(0)
+                file.truncate()
+                json.dump(data, file, indent=4)
+        except Exception as e:
+            wx.LogError(str(e))
+            wx.MessageBox(f"Failed to save task: {str(e)}", "Error", wx.OK | wx.ICON_ERROR)
+
 
 class PolicyStore:
     def __init__(self, policies: list[Policy]):
@@ -70,6 +143,10 @@ class ClientController:
                     writer.writerow([task['id'], user_name, 'No Policy Found', 'N/A'])
 
 if __name__ == "__main__":
+    app = wx.App()
+    frame = TaskInputFrame(None, title='Task Input Interface')
+    frame.Show()
+    app.MainLoop()
     ap = ArgumentParser()
     ap.add_argument('-p', '--port', default=14602, type=int)
     ap.add_argument('--user', default='config/users.json', type=str, help='Path to the user json file')
