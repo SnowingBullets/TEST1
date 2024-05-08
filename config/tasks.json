@@ -59,6 +59,24 @@
                     "expected_outcome": "Deny "
                 }
             ]
+        },
+        {
+            "id": "3",
+            "policy_id": "05A",
+            "description": "just a test",
+            "assigned_to": "10",
+            "actions": [
+                {
+                    "resource_id": "EFCI6554",
+                    "resource": "evidence",
+                    "type": "HI",
+                    "attributes": {
+                        "investigation": "FCI65",
+                        "department": "information-technology"
+                    },
+                    "expected_outcome": "Deny"
+                }
+            ]
         }
     ]
 }

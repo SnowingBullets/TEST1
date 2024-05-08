@@ -3,30 +3,47 @@ import csv
 import logging
 import wx
 import subprocess
+import sys
+import threading
 from argparse import ArgumentParser
 from collections import namedtuple
 from vakt import Policy
 from vakt.rules.string import Equal
 from vakt_server import VaktServer, VaktHandler
 
+# Global variable for the interface process
+interface_process = None
 
-class manage_interface():
-        # Get the user input
-    command = input("Enter 'start interface' to run interface or 'end interface' to stop: ")
-
-    if command == 'start interface':
-        # Start the interface.py script
-        process = subprocess.Popen(['python', 'src/server/interface.py'])
-        print("interface.py has started.")
-    elif command == 'end interface':
-        try:
-            subprocess.terminate()
-            subprocess.wait()
-            print("interface.py has been terminated.")
-        except NameError:
-            print("interface.py is not running.")
+def start_interface():
+    global interface_process
+    if interface_process is None:
+        interface_process = subprocess.Popen([sys.executable, 'src/server/interface.py'])
+        print("Interface started.")
     else:
-        print("Invalid command. Please enter 'start interface' or 'end interface'.")
+        print("Interface is already running.")
+
+def stop_interface():
+    global interface_process
+    if interface_process is not None:
+        interface_process.terminate()
+        interface_process = None
+        print("Interface stopped.")
+    else:
+        print("Interface is not running.")
+
+def command_handler():
+    print("Type 'start interface' to start the interface, 'end interface' to stop the interface, or 'exit' to quit.")
+    while True:
+        command = input("Enter command: ").strip().lower()
+        if command == 'start interface':
+            start_interface()
+        elif command == 'end interface':
+            stop_interface()
+        elif command == 'exit':
+            stop_interface()  # Ensure the interface is stopped before exiting
+            break
+        else:
+            print("Unknown command.")
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -176,20 +193,35 @@ def log_task_processing():
         for action in task.get('actions', []):
             attributes = json.dumps(action['attributes'])
             logging.debug(f"Action: {action['type']}, Attributes: {attributes}")
-            
+
+def start_vakt_server(policy_store, port):
+    with VaktServer(policy_store, ('', port), VaktHandler) as vs:
+        logging.debug("Starting Vakt server")
+        vs.serve_forever()
 
 if __name__ == "__main__":
     print("Main script running...")
-    interface_process = None
-    logging.debug("Starting application")
-    app = wx.App(False)
-    app.MainLoop()
+
+    # Start wx.App in a separate thread
+    def start_wx_app():
+        app = wx.App(False)
+        app.MainLoop()
+
+    wx_thread = threading.Thread(target=start_wx_app)
+    wx_thread.daemon = True
+    wx_thread.start()
+
+    # Start command handler in a separate thread
+    command_thread = threading.Thread(target=command_handler)
+    command_thread.daemon = True
+    command_thread.start()
+
+    # Parse arguments
     ap = ArgumentParser()
     ap.add_argument('-p', '--port', default=14602, type=int)
     ap.add_argument('--user', default='config/users.json', type=str, help='Path to the user json file')
     ap.add_argument('--task', default='config/tasks.json', type=str, help='Path to the tasks json file')
     ap.add_argument('--policy', default='config/policies.json', type=str, help='Path to the policies json file')
-    
     args = ap.parse_args()
 
     with open(args.user, 'r') as f:
@@ -198,13 +230,12 @@ if __name__ == "__main__":
         tasks = json.load(f)['tasks']
     with open(args.policy, 'r') as f:
         policies = json.load(f)
-    
+
     policy_store = PolicyStore.from_json(policies)
     client_controller = ClientController(user_data, tasks, policy_store)
 
     logging.debug("Processing tasks")
     client_controller.process_tasks()
 
-    with VaktServer(policy_store, ('', args.port), VaktHandler) as vs:
-        logging.debug("Starting Vakt server")
-        vs.serve_forever()
+    # Start Vakt server in the main thread
+    start_vakt_server(policy_store, args.port)

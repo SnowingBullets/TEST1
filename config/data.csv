@@ -1,5 +1,6 @@
-Task ID,User Name,Policy ID,Resource ID,Policy Effect,Action Type,Resource,Attributes,Conditions,Expected Outcome
-1,Hilary Pham,05A,,deny,read,investigation,"{""type"": ""HT"", ""suburb"": ""N/A"", ""city"": ""N/A"", ""state"": ""N/A""}",,denied
-1,Hilary Pham,05A,,deny,read,investigation,"{""type"": ""DTIP"", ""suburb"": ""Paddington"", ""city"": ""Brisbane "", ""state"": ""QLD""}",,denied_access
-2,Hilary Pham,07B,,allow,investigation,evidence,"{""investigation"": ""DTIP33"", ""department"": ""forensic""}",,deny
-2,Hilary Pham,07B,,allow,investigation,evidence,"{""investigation"": ""HIC46"", ""department"": ""forensic""}",,Deny 
+task_id,policy_id,resource_id,description,assigned_to,action_type,resource,attributes,conditions,expected_outcome
+1,05A,N/A,Deny access,6,read,investigation,"{""type"": ""HT"", ""suburb"": ""N/A"", ""city"": ""N/A"", ""state"": ""N/A""}",{},denied
+1,05A,N/A,Deny access,6,read,investigation,"{""type"": ""DTIP"", ""suburb"": ""Paddington"", ""city"": ""Brisbane "", ""state"": ""QLD""}",{},denied_access
+2,07B,N/A,Deny Action,6,investigation,evidence,"{""investigation"": ""DTIP33"", ""department"": ""forensic""}",{},deny
+2,07B,N/A,Deny Action,6,investigation,evidence,"{""investigation"": ""HIC46"", ""department"": ""forensic""}",{},Deny 
+3,05A,N/A,just a test,10,HI,evidence,"{""investigation"": ""FCI65"", ""department"": ""information-technology""}",{},Deny
