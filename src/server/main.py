@@ -3,14 +3,12 @@ import csv
 import logging
 import wx
 import json
-import os
 from argparse import ArgumentParser
 from collections import namedtuple
 from vakt_server import VaktServer, VaktHandler
-from vakt import Policy, Inquiry, Guard, RulesChecker, MemoryStorage
 
-# Configure logging to write to app.log
-logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+# Set up logging
+logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
 # Define a namedtuple for Policies
 Policy = namedtuple('Policy', ['id', 'effect', 'resource', 'action', 'subject', 'context'])
@@ -26,46 +24,6 @@ def load_policies():
 
 resources = load_resources()
 policies = load_policies()
-
-def load_policies_from_config(config_dir):
-    policies = []
-    for filename in os.listdir(config_dir):
-        if filename.endswith(".json"):
-            with open(os.path.join(config_dir, filename), 'r') as file:
-                config = json.load(file)
-                policy = Policy(
-                    config['id'],
-                    actions=config['actions'],
-                    resources=config['resources'],
-                    subjects=config['subjects'],
-                    effect=config['effect'],
-                    context=config.get('context', {}),
-                    description=config.get('description', "")
-                )
-                policies.append(policy)
-                logging.info(f"Added Policy: {policy}")
-    return policies
-
-def load_inquiries_from_csv(csv_file):
-    inquiries = []
-    with open(csv_file, newline='') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            context_str = row['Conditions'].replace('""', '"')
-            try:
-                context = json.loads(context_str)
-            except json.JSONDecodeError as e:
-                logging.error(f"Error decoding JSON for row: {row}, error: {e}")
-                context = {}
-
-            inquiry = Inquiry(
-                action=row['Action Type'],
-                resource=row['Resource'],
-                subject=row['User Name'],
-                context=context
-            )
-            inquiries.append(inquiry)
-    return inquiries
 
 def process_tasks_to_csv():
     with open('config/tasks.json', 'r') as file:
@@ -275,25 +233,7 @@ class ClientController:
                         'Attributes': attributes,
                         'Expected Outcome': action['expected_outcome']
                     })
-                    
-    def main():
-        logging.info("Starting to process tasks...")
 
-        # Initialize storage and guard
-        storage = MemoryStorage()
-        policies = load_policies_from_config('config')
-        for policy in policies:
-            storage.add(policy)
-        
-        guard = Guard(storage, RulesChecker())
-
-        # Process access requests from CSV
-        inquiries = load_inquiries_from_csv('config/data.csv')
-        for inquiry in inquiries:
-            if guard.is_allowed(inquiry):
-                logging.info(f"Access granted: {inquiry}")
-            else:
-                logging.info(f"Access denied: {inquiry}")
 
 if __name__ == "__main__":
     app = wx.App(False)
