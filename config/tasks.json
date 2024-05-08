@@ -33,11 +33,32 @@
             ]
         },
         {
-            "id": "",
-            "policy_id": "03D",
-            "description": "",
-            "assigned_to": "",
-            "actions": []
+            "id": "2",
+            "policy_id": "07B",
+            "description": "Deny Action",
+            "assigned_to": "6",
+            "actions": [
+                {
+                    "resource_id": "EDTIP3322",
+                    "resource": "evidence",
+                    "type": "investigation",
+                    "attributes": {
+                        "investigation": "DTIP33",
+                        "department": "forensic"
+                    },
+                    "expected_outcome": "deny"
+                },
+                {
+                    "resource_id": "EHIC4643",
+                    "resource": "evidence",
+                    "type": "investigation",
+                    "attributes": {
+                        "investigation": "HIC46",
+                        "department": "forensic"
+                    },
+                    "expected_outcome": "Deny "
+                }
+            ]
         }
     ]
 }
