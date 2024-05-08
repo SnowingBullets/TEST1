@@ -15,73 +15,144 @@ Policy = namedtuple('Policy', ['id', 'effect', 'resource', 'action', 'subject', 
 
 def process_tasks_to_csv():
     with open('config/tasks.json', 'r') as file:
-        data = json.load(file)['tasks']
+        tasks = json.load(file)['tasks']
     with open('config/data.csv', 'w', newline='') as csvfile:
-        # Include all possible keys that might be present in the task dictionaries
-        fieldnames = ['id', 'policy_id', 'description', 'assigned_to', 'status', 'date_activated', 'task_name']
+        fieldnames = ['task_id', 'policy_id', 'description', 'assigned_to', 'action_type', 'resource', 'attributes', 'conditions', 'expected_outcome']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for task in data:
-            writer.writerow(task)
+        for task in tasks:
+            for action in task.get('actions', []):
+                # Flatten attributes and conditions for CSV output
+                attributes = json.dumps(action.get('attributes', {}))
+                conditions = json.dumps(action.get('conditions', {}))
+                writer.writerow({
+                    'task_id': task['id'],
+                    'policy_id': task['policy_id'],
+                    'description': task['description'],
+                    'assigned_to': task['assigned_to'],
+                    'action_type': action['type'],
+                    'resource': action['resource'],
+                    'attributes': attributes,
+                    'conditions': conditions,
+                    'expected_outcome': action['expected_outcome']
+                })
     wx.MessageBox('Tasks processed and saved to data.csv', 'Success', wx.OK | wx.ICON_INFORMATION)
+    
 
-class TaskInputFrame(wx.Frame):
-    def __init__(self, parent, title):
-        super(TaskInputFrame, self).__init__(parent, title=title, size=(400, 300))
+class ActionInputFrame(wx.Dialog):
+    def __init__(self, parent):
+        super(ActionInputFrame, self).__init__(parent, title="Add Action", size=(300, 300))
+        self.parent = parent
         self.InitUI()
 
     def InitUI(self):
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
 
-        # Task input fields setup
-        self.tc_task_id = wx.TextCtrl(panel)
-        self.tc_policy_id = wx.TextCtrl(panel)
-        self.tc_description = wx.TextCtrl(panel)
-        self.tc_assigned_to = wx.TextCtrl(panel)
-        add_button = wx.Button(panel, label='Add Task')
-        add_button.Bind(wx.EVT_BUTTON, self.on_add_task)
-        
-        process_button = wx.Button(panel, label='Process Tasks')
-        process_button.Bind(wx.EVT_BUTTON, lambda event: process_tasks_to_csv())
+        self.tc_type = wx.TextCtrl(panel)
+        self.tc_resource = wx.TextCtrl(panel)
+        self.tc_attributes = wx.TextCtrl(panel)
+        self.tc_conditions = wx.TextCtrl(panel)
+        self.tc_expected_outcome = wx.TextCtrl(panel)
+        save_button = wx.Button(panel, label='Save Action')
+        save_button.Bind(wx.EVT_BUTTON, self.on_save_action)
 
         # Layout adjustments
-        vbox.Add(wx.StaticText(panel, label='Task ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
-        vbox.Add(self.tc_task_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
-        vbox.Add(wx.StaticText(panel, label='Policy ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
-        vbox.Add(self.tc_policy_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
-        vbox.Add(wx.StaticText(panel, label='Description'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
-        vbox.Add(self.tc_description, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
-        vbox.Add(wx.StaticText(panel, label='Assigned To'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
-        vbox.Add(self.tc_assigned_to, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
-        vbox.Add(add_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
-        vbox.Add(process_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
+        labels = ['Type', 'Resource', 'Attributes', 'Conditions', 'Expected Outcome']
+        controls = [self.tc_type, self.tc_resource, self.tc_attributes, self.tc_conditions, self.tc_expected_outcome]
+        for label, control in zip(labels, controls):
+            vbox.Add(wx.StaticText(panel, label=label), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+            vbox.Add(control, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
 
+        vbox.Add(save_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
         panel.SetSizer(vbox)
+
+    def on_save_action(self, event):
+        action_data = {
+            'type': self.tc_type.GetValue(),
+            'resource': self.tc_resource.GetValue(),
+            'attributes': self.tc_attributes.GetValue(),
+            'conditions': self.tc_conditions.GetValue(),
+            'expected_outcome': self.tc_expected_outcome.GetValue()
+        }
+        self.parent.actions.append(action_data)
+        self.Close()
+
+class TaskInputFrame(wx.Frame):
+    def __init__(self, parent, title):
+        super(TaskInputFrame, self).__init__(parent, title=title, size=(450, 400))
+        self.InitUI()
+        self.SetMinSize((450, 400))  # Setting a minimum size to ensure all fields are visible
+
+    def InitUI(self):
+        panel = wx.Panel(self)
+        grid = wx.GridBagSizer(5, 5)  # Using GridBagSizer for better control over layout
+
+        # Labels and Text Controls for action details
+        lbl_type = wx.StaticText(panel, label="Type")
+        self.tc_type = wx.TextCtrl(panel)
+        lbl_resource = wx.StaticText(panel, label="Resource")
+        self.tc_resource = wx.TextCtrl(panel)
+        lbl_attributes = wx.StaticText(panel, label="Attributes")
+        self.tc_attributes = wx.TextCtrl(panel, style=wx.TE_MULTILINE, size=(-1, 60))
+        lbl_conditions = wx.StaticText(panel, label="Conditions")
+        self.tc_conditions = wx.TextCtrl(panel, style=wx.TE_MULTILINE, size=(-1, 60))
+        lbl_outcome = wx.StaticText(panel, label="Expected Outcome")
+        self.tc_expected_outcome = wx.TextCtrl(panel)
+        save_button = wx.Button(panel, label='Save Action')
+        save_button.Bind(wx.EVT_BUTTON, self.on_save_action)
+
+        # Arranging items in the grid
+        grid.Add(lbl_type, pos=(0, 0), flag=wx.LEFT|wx.TOP, border=10)
+        grid.Add(self.tc_type, pos=(0, 1), span=(1, 2), flag=wx.EXPAND|wx.RIGHT|wx.TOP, border=10)
+        grid.Add(lbl_resource, pos=(1, 0), flag=wx.LEFT|wx.TOP, border=10)
+        grid.Add(self.tc_resource, pos=(1, 1), span=(1, 2), flag=wx.EXPAND|wx.RIGHT|wx.TOP, border=10)
+        grid.Add(lbl_attributes, pos=(2, 0), flag=wx.LEFT|wx.TOP, border=10)
+        grid.Add(self.tc_attributes, pos=(2, 1), span=(1, 2), flag=wx.EXPAND|wx.RIGHT|wx.TOP, border=10)
+        grid.Add(lbl_conditions, pos=(3, 0), flag=wx.LEFT|wx.TOP, border=10)
+        grid.Add(self.tc_conditions, pos=(3, 1), span=(1, 2), flag=wx.EXPAND|wx.RIGHT|wx.TOP, border=10)
+        grid.Add(lbl_outcome, pos=(4, 0), flag=wx.LEFT|wx.TOP, border=10)
+        grid.Add(self.tc_expected_outcome, pos=(4, 1), span=(1, 2), flag=wx.EXPAND|wx.RIGHT|wx.TOP, border=10)
+        grid.Add(save_button, pos=(5, 0), span=(1, 3), flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=10)
+
+        grid.AddGrowableCol(1)
+        panel.SetSizer(grid)
+        
+    def on_save_action(self, event):
+        action_data = {
+            'type': self.tc_type.GetValue(),
+            'resource': self.tc_resource.GetValue(),
+            'attributes': self.tc_attributes.GetValue(),
+            'conditions': self.tc_conditions.GetValue(),
+            'expected_outcome': self.tc_expected_outcome.GetValue()
+        }
+        self.EndModal(wx.ID_OK)  # Close dialog and return OK status
+        self.parent.actions.append(action_data)  # Append to parent's action list    
+        
+    def on_add_action(self, event):
+        action_frame = ActionInputFrame(self)
+        action_frame.ShowModal()
 
     def on_add_task(self, event):
         task_data = {
             'id': self.tc_task_id.GetValue(),
             'policy_id': self.tc_policy_id.GetValue(),
             'description': self.tc_description.GetValue(),
-            'assigned_to': self.tc_assigned_to.GetValue()
+            'assigned_to': self.tc_assigned_to.GetValue(),
+            'actions': self.actions
         }
         self.save_task(task_data)
-        wx.MessageBox('Task Added', 'Info', wx.OK | wx.ICON_INFORMATION)
+        wx.MessageBox('Task added', 'Info', wx.OK | wx.ICON_INFORMATION)
+        self.actions = []  # Reset actions list after saving
 
     def save_task(self, task_data):
-        try:
-            with open('config/tasks.json', 'r+') as file:
-                data = json.load(file)
-                if 'tasks' not in data:
-                    data['tasks'] = []
-                data['tasks'].append(task_data)
-                file.seek(0)
-                file.truncate()
-                json.dump(data, file, indent=4)
-        except Exception as e:
-            wx.LogError(str(e))
-            wx.MessageBox(f"Failed to save task: {str(e)}", "Error", wx.OK | wx.ICON_ERROR)
+        with open('config/tasks.json', 'r+') as file:
+            data = json.load(file)
+            data['tasks'].append(task_data)
+            file.seek(0)
+            file.truncate()
+            json.dump(data, file, indent=4)
+            
 
 
 class PolicyStore:
@@ -123,27 +194,36 @@ class ClientController:
     def process_tasks(self):
         logging.info("Starting to process tasks...")
         with open('config/data.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Task ID', 'User Name', 'Policy ID', 'Policy Effect'])
-
+            fieldnames = ['Task ID', 'User Name', 'Policy ID', 'Policy Effect', 'Action Type', 'Resource', 'Attributes', 'Conditions', 'Expected Outcome']
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            
             for task in self.tasks:
                 user = next((user for user in self.users if user['id'] == task['assigned_to']), None)
-                if user:
-                    user_name = user['name']
-                else:
-                    user_name = 'Unknown User'
-                    logging.debug(f"No user matched for task ID {task['id']}")
-
+                user_name = user['name'] if user else 'Unknown User'
+                
                 policy = self.policy_store.get_policy(task['policy_id'])
-                if policy:
-                    logging.debug(f"Processing task {task['id']} for user {user_name} under policy {policy.id}")
-                    writer.writerow([task['id'], user_name, policy.id, policy.effect])
-                else:
-                    logging.debug(f"No policy found for task ID {task['id']}")
-                    writer.writerow([task['id'], user_name, 'No Policy Found', 'N/A'])
+                policy_effect = policy.effect if policy else 'No Policy Found'
+                
+                for action in task.get('actions', []):
+                    attributes = json.dumps(action['attributes'])
+                    conditions = json.dumps(action['conditions'])
+                    
+                    writer.writerow({
+                        'Task ID': task['id'],
+                        'User Name': user_name,
+                        'Policy ID': task['policy_id'],
+                        'Policy Effect': policy_effect,
+                        'Action Type': action['type'],
+                        'Resource': action['resource'],
+                        'Attributes': attributes,
+                        'Conditions': conditions,
+                        'Expected Outcome': action['expected_outcome']
+                    })
+
 
 if __name__ == "__main__":
-    app = wx.App()
+    app = wx.App(False)
     frame = TaskInputFrame(None, title='Task Input Interface')
     frame.Show()
     app.MainLoop()
