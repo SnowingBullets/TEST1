@@ -1,4 +1,4 @@
-Task ID,User Name,Policy ID,Policy Effect,Action Type,Resource,Attributes,Conditions,Expected Outcome
-1,Jackson Hoster,01A,deny,read,investigation,"{""type"": ""Homicide"", ""suburb"": ""Clackson"", ""state"": ""QLD""}","{""ip-class"": ""local"", ""os"": ""windows"", ""time"": ""business_hours""}",access_granted
-1,Jackson Hoster,01A,deny,write,investigation,"{""type"": ""Homicide"", ""suburb"": ""Clackson"", ""state"": ""QLD""}","{""ip-class"": ""remote"", ""os"": ""iOS"", ""time"": ""after_hours""}",access_denied
-2,Jamie Michael,03D,allow,write,emergency-response,"{""type"": ""Bomb Threat"", ""suburb"": ""Byron Bay"", ""state"": ""NSW""}","{""ip-class"": ""local"", ""os"": ""windows"", ""mfa"": true}",write_successful
+Task ID,User Name,Policy ID,Resource ID,Policy Effect,Action Type,Resource,Attributes,Conditions,Expected Outcome
+1,Jackson Hoster,01A,EI56,deny,read,investigation,"{""type"": ""Homicide"", ""suburb"": ""Clackson"", ""state"": ""QLD""}","{""ip-class"": ""local"", ""os"": ""windows"", ""time"": ""business_hours""}",access_granted
+1,Jackson Hoster,01A,EI56,deny,write,investigation,"{""type"": ""Homicide"", ""suburb"": ""Clackson"", ""state"": ""QLD""}","{""ip-class"": ""remote"", ""os"": ""iOS"", ""time"": ""after_hours""}",access_denied
+2,Jamie Michael,03D,EI56,allow,write,emergency-response,"{""type"": ""Bomb Threat"", ""suburb"": ""Byron Bay"", ""state"": ""NSW""}","{""ip-class"": ""local"", ""os"": ""windows"", ""mfa"": true}",write_successful

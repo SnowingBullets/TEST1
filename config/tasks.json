@@ -62,6 +62,38 @@
                     "expected_outcome": "write_successful"
                 }
             ]
+        },
+        {
+            "id": "3",
+            "policy_id": "05A",
+            "description": "Deny access",
+            "assigned_to": "6",
+            "actions": [
+                {
+                    "resource_id": "HT456",
+                    "resource": "investigation",
+                    "type": "read",
+                    "attributes": {
+                        "type": "HT",
+                        "suburb": "N/A",
+                        "city": "N/A",
+                        "state": "N/A"
+                    },
+                    "expected_outcome": "denied"
+                },
+                {
+                    "resource_id": "DTIP33",
+                    "resource": "investigation",
+                    "type": "read",
+                    "attributes": {
+                        "type": "DTIP",
+                        "suburb": "Paddington",
+                        "city": "Brisbane ",
+                        "state": "QLD"
+                    },
+                    "expected_outcome": "denied_access"
+                }
+            ]
         }
     ]
 }
