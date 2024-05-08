@@ -2,11 +2,31 @@ import json
 import csv
 import logging
 import wx
+import subprocess
 from argparse import ArgumentParser
 from collections import namedtuple
 from vakt import Policy
 from vakt.rules.string import Equal
 from vakt_server import VaktServer, VaktHandler
+
+
+class manage_interface():
+        # Get the user input
+    command = input("Enter 'start interface' to run interface or 'end interface' to stop: ")
+
+    if command == 'start interface':
+        # Start the interface.py script
+        process = subprocess.Popen(['python', 'src/server/interface.py'])
+        print("interface.py has started.")
+    elif command == 'end interface':
+        try:
+            subprocess.terminate()
+            subprocess.wait()
+            print("interface.py has been terminated.")
+        except NameError:
+            print("interface.py is not running.")
+    else:
+        print("Invalid command. Please enter 'start interface' or 'end interface'.")
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -156,8 +176,11 @@ def log_task_processing():
         for action in task.get('actions', []):
             attributes = json.dumps(action['attributes'])
             logging.debug(f"Action: {action['type']}, Attributes: {attributes}")
+            
 
 if __name__ == "__main__":
+    print("Main script running...")
+    interface_process = None
     logging.debug("Starting application")
     app = wx.App(False)
     app.MainLoop()
