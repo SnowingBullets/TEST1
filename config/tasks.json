@@ -5,6 +5,7 @@
             "description": "Access confidential investigation files",
             "assigned_to": "1",
             "policy_id": "01A",
+            "resource_id": "EI56",
             "actions": [
                 {
                     "type": "read",
@@ -43,6 +44,7 @@
             "description": "Update emergency response details",
             "assigned_to": "3",
             "policy_id": "03D",
+            "resource_id": "EI56",
             "actions": [
                 {
                     "type": "write",
@@ -58,21 +60,6 @@
                         "mfa": true
                     },
                     "expected_outcome": "write_successful"
-                }
-            ]
-        },
-        {
-            "id": "3",
-            "policy_id": "05B",
-            "description": "Deny Access",
-            "assigned_to": "6",
-            "actions": [
-                {
-                    "resource_id": "EI56",
-                    "type": "investigation",
-                    "attributes": "{\"type\": \"ETI\", \"suburb\": \"South Yarra\", \"city\": \"Melbourne\", \"state\": \"VIC\"}",
-                    "conditions": "",
-                    "expected_outcome": "access_denied"
                 }
             ]
         }

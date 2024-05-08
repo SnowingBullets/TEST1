@@ -29,7 +29,7 @@ def process_tasks_to_csv():
     with open('config/tasks.json', 'r') as file:
         tasks = json.load(file)['tasks']
     with open('config/data.csv', 'w', newline='') as csvfile:
-        fieldnames = ['task_id', 'policy_id', 'description', 'assigned_to', 'action_type', 'resource', 'attributes', 'conditions', 'expected_outcome']
+        fieldnames = ['task_id', 'policy_id', 'resource_id','description', 'assigned_to', 'action_type', 'resource', 'attributes', 'conditions', 'expected_outcome']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for task in tasks:
@@ -40,6 +40,7 @@ def process_tasks_to_csv():
                 writer.writerow({
                     'task_id': task['id'],
                     'policy_id': task['policy_id'],
+                    'resource_id': task['resource_id'],
                     'description': task['description'],
                     'assigned_to': task['assigned_to'],
                     'action_type': action['type'],
@@ -103,37 +104,40 @@ class ActionInputFrame(wx.Dialog):
 
 class TaskInputFrame(wx.Frame):
     def __init__(self, parent, title):
-        super(TaskInputFrame, self).__init__(parent, title=title, size=(450, 600))
-        self.actions = []
+        super(TaskInputFrame, self).__init__(parent, title=title, size=(450, 400))
         self.InitUI()
 
     def InitUI(self):
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
-
+        
+        # Existing fields setup
         self.tc_task_id = wx.TextCtrl(panel)
         self.cb_policy_id = wx.ComboBox(panel, choices=[policy['id'] for policy in policies], style=wx.CB_READONLY)
         self.tc_description = wx.TextCtrl(panel)
         self.tc_assigned_to = wx.TextCtrl(panel)
         add_button = wx.Button(panel, label='Add Task')
-        add_action_button = wx.Button(panel, label='Add Action')
-        
+        process_tasks_button = wx.Button(panel, label='Process Tasks')  # New button for processing tasks
+
         add_button.Bind(wx.EVT_BUTTON, self.on_add_task)
-        add_action_button.Bind(wx.EVT_BUTTON, self.on_add_action)
+        process_tasks_button.Bind(wx.EVT_BUTTON, self.on_process_tasks)  # Bind the new button to handler
 
-        fields = [
-            ('Task ID', self.tc_task_id), ('Policy ID', self.cb_policy_id),
-            ('Description', self.tc_description), ('Assigned To', self.tc_assigned_to)
-        ]
-        for label, control in fields:
-            vbox.Add(wx.StaticText(panel, label=label), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
-            vbox.Add(control, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        # Layout adjustments
+        vbox.Add(wx.StaticText(panel, label='Task ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_task_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Policy ID'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.cb_policy_id, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Description'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_description, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(wx.StaticText(panel, label='Assigned To'), flag=wx.EXPAND|wx.LEFT|wx.TOP, border=10)
+        vbox.Add(self.tc_assigned_to, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+        vbox.Add(add_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)
+        vbox.Add(process_tasks_button, flag=wx.ALIGN_CENTER|wx.TOP, border=10)  # Add the new button to the layout
 
-        vbox.Add(add_action_button, flag=wx.EXPAND|wx.ALL, border=10)
-        vbox.Add(add_button, flag=wx.ALIGN_CENTER|wx.ALL, border=10)
         panel.SetSizer(vbox)
 
     def on_add_task(self, event):
+        # Existing add task functionality
         selected_policy = policies[self.cb_policy_id.GetSelection()]
         task_data = {
             'id': self.tc_task_id.GetValue(),
@@ -143,14 +147,16 @@ class TaskInputFrame(wx.Frame):
             'actions': self.actions
         }
         self.save_task(task_data)
+        wx.MessageBox('Task added', 'Info', wx.OK | wx.ICON_INFORMATION)
         self.actions = []  # Reset actions list after saving
-        wx.MessageBox('Task added with actions', 'Info', wx.OK | wx.ICON_INFORMATION)
 
-    def on_add_action(self, event):
-        action_frame = ActionInputFrame(self)
-        action_frame.ShowModal()
+    def on_process_tasks(self, event):
+        # Function to process tasks to CSV
+        process_tasks_to_csv()
+        wx.MessageBox('Tasks processed and saved to data.csv', 'Success', wx.OK | wx.ICON_INFORMATION)
 
     def save_task(self, task_data):
+        # Existing save task functionality
         try:
             with open('config/tasks.json', 'r+') as file:
                 data = json.load(file)
