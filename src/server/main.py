@@ -4,6 +4,8 @@ import logging
 import wx
 from argparse import ArgumentParser
 from collections import namedtuple
+from vakt import Policy
+from vakt.rules.string import Equal
 from vakt_server import VaktServer, VaktHandler
 
 # Set up logging
@@ -23,12 +25,21 @@ def load_policies():
         policies = json.load(file)
         logging.info('Loaded policies: %s', policies)
         return policies
+    
+def load_policies_from_csv():
+    logging.debug("Loading policies from config/policies.csv")
+    policies = []
+    with open('config/policies.csv', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            policies.append(row)
+    return policies
 
 resources = load_resources()
 policies = load_policies()
 
 def process_tasks_to_csv():
-    logging.info('Processing tasks to CSV')
+    logging.debug("Processing tasks to CSV")
     with open('config/tasks.json', 'r') as file:
         tasks = json.load(file)['tasks']
     with open('config/data.csv', 'w', newline='') as csvfile:
@@ -36,7 +47,6 @@ def process_tasks_to_csv():
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for task in tasks:
-            logging.info('Processing task: %s', task)
             for action in task.get('actions', []):
                 # Flatten attributes and conditions for CSV output
                 attributes = json.dumps(action.get('attributes', {}))
@@ -44,6 +54,7 @@ def process_tasks_to_csv():
                 writer.writerow({
                     'task_id': task['id'],
                     'policy_id': task['policy_id'],
+                    'resource_id': task.get('resource_id', 'N/A'),  # Provide a default value if key is missing
                     'description': task['description'],
                     'assigned_to': task['assigned_to'],
                     'action_type': action['type'],
@@ -52,51 +63,20 @@ def process_tasks_to_csv():
                     'conditions': conditions,
                     'expected_outcome': action['expected_outcome']
                 })
-                logging.info('Logged action to CSV: %s', {
-                    'task_id': task['id'],
-                    'policy_id': task['policy_id'],
-                    'description': task['description'],
-                    'assigned_to': task['assigned_to'],
-                    'action_type': action['type'],
-                    'resource': action['resource'],
-                    'attributes': attributes,
-                    'conditions': conditions,
-                    'expected_outcome': action['expected_outcome']
-                })
-    wx.MessageBox('Tasks processed and saved to data.csv', 'Success', wx.OK | wx.ICON_INFORMATION)
-    
+
 def enforce_policies_from_csv():
-    logging.info('Enforcing policies from CSV')
-    storage = InMemoryStorage()
+    policies = load_policies_from_csv()
+    
     for policy in policies:
-        p = Policy(
-            policy['id'], 
-            policy['effect'], 
-            Equal(policy['resource']), 
-            Equal(policy['action']), 
-            Equal(policy['subject']), 
-            context=None
-        )
-        storage.add(p)
-    
-    guard = Guard(storage)
-    
-    with open('config/data.csv', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            logging.info('Evaluating task from CSV: %s', row)
-            inc = inquiry.Inquiry(
-                action=row['action_type'],
-                resource=row['resource'],
-                subject=row['assigned_to']
-            )
-            result = guard.is_allowed(inc)
-            if result == ALLOW_ACCESS:
-                logging.info('Access granted for task ID %s', row['task_id'])
-            elif result == DENY_ACCESS:
-                logging.info('Access denied for task ID %s', row['task_id'])
-            else:
-                logging.info('No matching policy for task ID %s', row['task_id'])
+        resource = policy.get('resource', '')
+        if not isinstance(resource, str):
+            resource = str(resource)
+        
+        enforce_policy(Equal(resource), policy)
+
+def enforce_policy(resource, policy):
+    # Your policy enforcement logic here
+    pass
 
 class ActionInputFrame(wx.Dialog):
     def __init__(self, parent):
@@ -297,11 +277,11 @@ def log_task_processing():
             logging.debug(f"Action: {action['type']}, Attributes: {attributes}")
 
 if __name__ == "__main__":
+    logging.debug("Starting application")
     app = wx.App(False)
     frame = TaskInputFrame(None, title='Task Input Interface')
     frame.Show()
     app.MainLoop()
-    
     ap = ArgumentParser()
     ap.add_argument('-p', '--port', default=14602, type=int)
     ap.add_argument('--user', default='config/users.json', type=str, help='Path to the user json file')
@@ -309,26 +289,20 @@ if __name__ == "__main__":
     ap.add_argument('--policy', default='config/policies.json', type=str, help='Path to the policies json file')
     
     args = ap.parse_args()
-    
+
     with open(args.user, 'r') as f:
         user_data = json.load(f)['users']
-        logging.info('Loaded users: %s', user_data)
     with open(args.task, 'r') as f:
         tasks = json.load(f)['tasks']
-        logging.info('Loaded tasks: %s', tasks)
     with open(args.policy, 'r') as f:
         policies = json.load(f)
-        logging.info('Loaded policies: %s', policies)
     
     policy_store = PolicyStore.from_json(policies)
     client_controller = ClientController(user_data, tasks, policy_store)
 
+    logging.debug("Processing tasks")
     client_controller.process_tasks()
-    logging.info('Processed tasks')
-
-    process_tasks_to_csv()
-    enforce_policies_from_csv()
 
     with VaktServer(policy_store, ('', args.port), VaktHandler) as vs:
-        logging.info('Starting VaktServer on port %d', args.port)
+        logging.debug("Starting Vakt server")
         vs.serve_forever()
