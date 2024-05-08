@@ -1,6 +1,6 @@
 {
     "tasks": [
-            {
+        {
             "id": "1",
             "policy_id": "05A",
             "description": "Deny access",
@@ -31,6 +31,13 @@
                     "expected_outcome": "denied_access"
                 }
             ]
+        },
+        {
+            "id": "",
+            "policy_id": "03D",
+            "description": "",
+            "assigned_to": "",
+            "actions": []
         }
     ]
 }
