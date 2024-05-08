@@ -1,0 +1,6 @@
+flwr
+numpy
+pandas
+scikit-learn
+torch
+vakt

@@ -1,0 +1,13 @@
+{
+    "tasks": [
+      {
+        "id": "2",
+        "policy_id": "01A",
+        "task_name": "Deny Request for Non-MFA Users",
+        "assigned_to": "1",
+        "date_activated": "2024-04-30",
+        "status": "Pending",
+        "description": "Deny all requests from users without multi-factor authentication"
+      }
+    ]
+  }

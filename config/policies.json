@@ -1,0 +1,468 @@
+[
+  {
+    "id": "00A",
+    "description": "Allow users to enable multi-factor authentication",
+    "effect": "allow",
+    "resource": {
+      "category": "system",
+      "id": "*"
+    },
+    "action": {
+      "eq": "enable-mfa"
+    },
+    "context": {
+      "mfa": {
+        "eq": false
+      }
+    }
+  },
+  {
+    "id": "01A",
+    "description": "Deny all requests from users without multi-factor authentication",
+    "effect": "deny",
+    "resource": {
+      "category": "*",
+      "id": "*"
+    },
+    "action": {
+      "neq": "enable-mfa"
+    }
+  },
+  {
+    "id": "02A",
+    "description": "Prevent users from sending multiple requests in a 10ms window",
+    "effect": "deny",
+    "resource": {
+      "category": "*",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "context": {
+      "elapsed-since-inquiry": {
+        "lt": 10
+      }
+    }
+  },
+  {
+    "id": "03A",
+    "description": "Prevent all access from Android and iOS devices with access level less than 3 when off-site",
+    "effect": "deny",
+    "resource": {
+      "category": "*",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "lt": 3
+      }
+    },
+    "context": {
+      "os": {
+        "in": [
+          "ios",
+          "android"
+        ]
+      },
+      "ip-class": {
+        "eq": "remote"
+      }
+    }
+  },
+  {
+    "id": "04A",
+    "description": "Allow users to perform actions if the session duration is less than 10 seconds",
+    "effect": "allow",
+    "resource": {
+      "category": "system",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "context": {
+      "session-duration": {
+        "lt": 10
+      }
+    }
+  },
+  {
+    "id": "05A",
+    "description": "Deny any action if the user is not logged in",
+    "effect": "deny",
+    "resource": {
+      "category": "*",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "lt": 3
+      }
+    }
+  },
+  {
+    "id": "00B",
+    "description": "Prevent users from deleting any investigation",
+    "effect": "deny",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "delete"
+    }
+  },
+  {
+    "id": "01B",
+    "description": "Allow access level 5 to perform any action other than closing the investigation",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "neq": "close"
+    },
+    "subject": {
+      "access": {
+        "eq": 5
+      }
+    }
+  },
+  {
+    "id": "02B",
+    "description": "Allow access level 5 with the task force of the investigation to close it, provided they are on a Windows computer and have a local IP address",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "close"
+    },
+    "subject": {
+      "access": {
+        "eq": 5
+      },
+      "task-force": "case-id"
+    },
+    "context": {
+      "ip-class": {
+        "eq": "local"
+      },
+      "os": {
+        "eq": "windows"
+      }
+    }
+  },
+  {
+    "id": "03B",
+    "description": "Allow users of access level 4 or higher when using a local IP to read investigations",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "read"
+    },
+    "subject": {
+      "access": {
+        "geq": 4
+      }
+    },
+    "context": {
+      "ip-class": {
+        "eq": "local"
+      }
+    }
+  },
+  {
+    "id": "04B",
+    "description": "Allow users of access level 4 or higher assigned to the task force for the investigation to open the investigation",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "open"
+    },
+    "subject": {
+      "access": {
+        "geq": 4
+      },
+      "task-force": {
+        "eq": "case-id"
+      }
+    }
+  },
+  {
+    "id": "05B",
+    "description": "Deny users below access level 4 from accessing the investigations if their state geolocation doesn't match the case state",
+    "effect": "deny",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "lt": 4
+      }
+    },
+    "context": {
+      "geolocation": {
+        "eq": "case-state"
+      }
+    }
+  },
+  {
+    "id": "06B",
+    "description": "Allow task force members of level 3 or higher to read and write to the investigation",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": [
+        "read",
+        "write"
+      ]
+    },
+    "subject": {
+      "access": {
+        "geq": 3
+      },
+      "task-force": {
+        "eq": "case-id"
+      }
+    }
+  },
+  {
+    "id": "07B",
+    "description": "Allow users with access level 1 or higher to open the investigation if assigned to the task force",
+    "effect": "allow",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "open"
+    },
+    "subject": {
+      "access": {
+        "geq": 1
+      },
+      "task-force": {
+        "eq": "case-id"
+      }
+    }
+  },
+  {
+    "id": "00C",
+    "description": "Prevent users from deleting any evidence",
+    "effect": "deny",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "destroy"
+    }
+  },
+  {
+    "id": "01C",
+    "description": "Deny any user with a remote IP address from accessing the evidence database",
+    "effect": "deny",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "context": {
+      "ip-class": {
+        "neq": "local"
+      }
+    }
+  },
+  {
+    "id": "02C",
+    "description": "Allow users of access level 5 to perform any actions with evidence",
+    "effect": "allow",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "eq": 5
+      }
+    }
+  },
+  {
+    "id": "03C",
+    "description": "Allow users of access level 4 or higher assigned to the task force to add evidence",
+    "effect": "allow",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "add"
+    },
+    "subject": {
+      "access": {
+        "geq": 4
+      },
+      "task-force": {
+        "eq": "parent-id"
+      }
+    }
+  },
+  {
+    "id": "04C",
+    "description": "Allow users of access level 4 or higher to retrieve evidence",
+    "effect": "allow",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "retrieve"
+    },
+    "subject": {
+      "access": {
+        "geq": 4
+      },
+      "task-force": {
+        "eq": "parent-id"
+      }
+    }
+  },
+  {
+    "id": "05C",
+    "description": "Allow users of access level 3 or higher assigned to the evidence department to retrieve evidence",
+    "effect": "allow",
+    "resource": {
+      "category": "evidence",
+      "id": "*"
+    },
+    "action": {
+      "eq": "retrieve"
+    },
+    "subject": {
+      "access": {
+        "geq": 3
+      },
+      "department": "evidence-department"
+    }
+  },
+  {
+    "id": "00D",
+    "description": "Allow users of access level 5 when using a local IP to perform any action ",
+    "effect": "allow",
+    "resource": {
+      "category": "emergency-response",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "geq": 5
+      }
+    },
+    "context": {
+      "ip-class": {
+        "eq": "local"
+      }
+    }
+  },
+  {
+    "id": "01D",
+    "description": "Deny those below access level 5 who are not in the emergency response department from performing any action",
+    "effect": "deny",
+    "resource": {
+      "category": "emergency-response",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "lt": 5
+      },
+      "department": {
+        "neq": "emergency-response"
+      }
+    }
+  },
+  {
+    "id": "02D",
+    "description": "Allow those of access level 4 or higher when using a local IP to perform any action",
+    "effect": "allow",
+    "resource": {
+      "category": "emergency-response",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "geq": 4
+      },
+      "department": {
+        "eq": "emergency-response"
+      }
+    },
+    "context": {
+      "ip-class": {
+        "eq": "local"
+      }
+    }
+  },
+  {
+    "id": "03D",
+    "description": "Allow those with access level 3 or higher when using a local IP to write to the emergency response database",
+    "effect": "allow",
+    "resource": {
+      "category": "emergency-response",
+      "id": "*"
+    },
+    "action": {
+      "eq": "write"
+    },
+    "subject": {
+      "access": {
+        "geq": 3
+      },
+      "department": {
+        "eq": "emergency-response"
+      }
+    },
+    "context": {
+      "ip-class": {
+        "eq": "local"
+      }
+    }
+  }
+]

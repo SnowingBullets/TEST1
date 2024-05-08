@@ -1,0 +1,289 @@
+{
+  "categories": [
+    {
+      "id": "system",
+      "actions": [
+        "log-in",
+        "log-out",
+        "enable-mfa"
+      ]
+    },
+    {
+      "id": "investigation",
+      "attributes": [
+        "type",
+        "suburb",
+        "city",
+        "state"
+      ],
+      "actions": [
+        "open",
+        "close",
+        "read",
+        "write",
+        "delete"
+      ]
+    },
+    {
+      "id": "evidence",
+      "attributes": [
+        "investigation",
+        "department"
+      ],
+      "actions": [
+        "add",
+        "destroy",
+        "retrieve",
+        "write",
+        "delete"
+      ]
+    },
+    {
+      "id": "emergency-response",
+      "attributes": [
+        "type",
+        "suburb",
+        "city",
+        "state"
+      ],
+      "actions": [
+        "open",
+        "write",
+        "announce"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "SYS",
+      "category": "system"
+    },
+
+    {
+      "id": "HIC45",
+      "category": "investigation",
+      "attributes": {
+        "type": "HI",
+        "suburb": "Clackson",
+        "city": "Brisbane",
+        "state": "QLD"
+      }
+    },
+    {
+      "id": "HIM76",
+      "category": "investigation",
+      "attributes": {
+        "type": "HI",
+        "suburb": "Manly",
+        "city": "Sydney",
+        "state": "NSW"
+      }
+    },
+    {
+      "id": "SOCB56",
+      "category": "investigation",
+      "attributes": {
+        "type": "SOCI",
+        "suburb": "Brighton",
+        "city": "Melbourne",
+        "state": "VIC"
+      }
+    },
+    {
+      "id": "DTIP33",
+      "category": "investigation",
+      "attributes": {
+        "type": "DTIP",
+        "suburb": "Paddington",
+        "city": "Brisbane ",
+        "state": "QLD"
+      }
+    },
+    {
+      "id": "FCI65",
+      "category": "investigation",
+      "attributes": {
+        "type": "FCI",
+        "suburb": "Cottesloe",
+        "city": "Perth",
+        "state": "WA"
+      }
+    },
+    {
+      "id": "CTI555",
+      "category": "investigation",
+      "attributes": {
+        "type": "CTI",
+        "suburb": "N/A",
+        "city": "N/A",
+        "state": "N/A"
+      }
+    },
+    {
+      "id": "HT456",
+      "category": "investigation",
+      "attributes": {
+        "type": "HT",
+        "suburb": "N/A",
+        "city": "N/A",
+        "state": "N/A"
+      }
+    },
+    {
+      "id": "SOCI43",
+      "category": "investigation",
+      "attributes": {
+        "type": "SOCI",
+        "suburb": "Bradley",
+        "city": "Perth",
+        "state": "WA"
+      }
+    },
+    {
+      "id": "CIBB44",
+      "category": "investigation",
+      "attributes": {
+        "type": "CCI",
+        "suburb": "Bondi Beach",
+        "city": "Sydney",
+        "state": "NSW"
+      }
+    },
+    {
+      "id": "BPI89",
+      "category": "investigation",
+      "attributes": {
+        "type": "BPI",
+        "suburb": "N/A",
+        "city": "N/A",
+        "state": "N/A"
+      }
+    },
+    {
+      "id": "EI56",
+      "category": "investigation",
+      "attributes": {
+        "type": "ETI",
+        "suburb": "South Yarra",
+        "city": "Melbourne",
+        "state": "VIC"
+      }
+    },
+    {
+      "id": "MLI22",
+      "category": "investigation",
+      "attributes": {
+        "type": "MLI",
+        "suburb": "Fortitude Valley",
+        "city": "Brisbane",
+        "state": "QLD"
+      }
+    },
+    {
+      "id": "EDTIP3322",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "DTIP33",
+        "department": "forensic"
+      }
+    },
+    {
+      "id": "EFCI6554",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "FCI65",
+        "department": "information-technology"
+      }
+    },
+    {
+      "id": "ECIB4476",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "CIBB44",
+        "department": "information-technology"
+      }
+    },
+    {
+      "id": "ESOCI4333",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "SOCI43",
+        "department": "forensic"
+      }
+    },
+    {
+      "id": "ESOCI4354",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "SOCI43",
+        "department": "information-technology"
+      }
+    },
+    {
+      "id": "EHIC5487",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "HIC45",
+        "department": "forensic"
+      }
+    },
+    {
+      "id": "EHIC4643",
+      "category": "evidence",
+      "attributes": {
+        "investigation": "HIC46",
+        "department": "forensic"
+      }
+    },
+    {
+      "id": "ERBT45",
+      "category": "emergency-response",
+      "attributes": {
+        "type": "ERBT",
+        "suburb": "Byron Bay",
+        "city": "Byron Shire",
+        "state": "NSW"
+      }
+    },
+    {
+      "id": "ERSHI4",
+      "category": "emergency-response",
+      "attributes": {
+        "type": "ERSHI",
+        "suburb": "Fremantle",
+        "city": "Perth",
+        "state": "WA"
+      }
+    },
+    {
+      "id": "ERTA58",
+      "category": "emergency-response",
+      "attributes": {
+        "type": "ERTA",
+        "suburb": "Bendle",
+        "city": "Perth",
+        "state": "WA"
+      }
+    },
+    {
+      "id": "ERND6",
+      "category": "emergency-response",
+      "attributes": {
+        "type": "ERND",
+        "suburb": "Nagonmi",
+        "city": "Denpasar",
+        "state": "Bali"
+      }
+    },
+    {
+      "id": "ERND7",
+      "category": "emergency-response",
+      "attributes": {
+        "type": "ERND",
+        "suburb": "Hobart CBD",
+        "city": "Hobart",
+        "state": "Tasmania"
+      }
+    }
+  ]
+}
