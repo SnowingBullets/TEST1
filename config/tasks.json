@@ -1,102 +1,127 @@
 {
     "tasks": [
-      {
-        "id": "1",
-        "policy_id": "05A",
-        "description": "Deny access",
-        "assigned_to": "6",
-        "actions": [
-          {
-            "resource_id": "HT456",
-            "resource": "investigation",
-            "type": "read",
-            "attributes": {
-              "type": "HT",
-              "suburb": "N/A",
-              "city": "N/A",
-              "state": "N/A"
-            },
-            "expected_outcome": "denied"
-          },
-          {
-            "resource_id": "DTIP33",
-            "resource": "investigation",
-            "type": "read",
-            "attributes": {
-              "type": "DTIP",
-              "suburb": "Paddington",
-              "city": "Brisbane",
-              "state": "QLD"
-            },
-            "expected_outcome": "denied_access"
-          }
-        ]
-      },
-      {
-        "id": "2",
-        "policy_id": "07B",
-        "description": "Deny Action",
-        "assigned_to": "6",
-        "actions": [
-          {
-            "resource_id": "EDTIP3322",
-            "resource": "evidence",
-            "type": "investigation",
-            "attributes": {
-              "investigation": "DTIP33",
-              "department": "forensic"
-            },
-            "expected_outcome": "deny"
-          },
-          {
-            "resource_id": "EHIC4643",
-            "resource": "evidence",
-            "type": "investigation",
-            "attributes": {
-              "investigation": "HIC46",
-              "department": "forensic"
-            },
-            "expected_outcome": "Deny"
-          }
-        ]
-      },
-      {
-        "id": "3",
-        "policy_id": "05A",
-        "description": "just a test",
-        "assigned_to": "10",
-        "actions": [
-          {
-            "resource_id": "EFCI6554",
-            "resource": "evidence",
-            "type": "HI",
-            "attributes": {
-              "investigation": "FCI65",
-              "department": "information-technology"
-            },
-            "expected_outcome": "Deny"
-          }
-        ]
-      },
-      {
-        "id": "4",
-        "policy_id": "08C",
-        "description": "Shawn Holden denied access to HIC45",
-        "assigned_to": "11",
-        "actions": [
-          {
-            "resource_id": "HIC45",
-            "resource": "investigation",
-            "type": "read",
-            "attributes": {
-              "type": "HI",
-              "suburb": "Clackson",
-              "city": "Brisbane",
-              "state": "QLD"
-            },
-            "expected_outcome": "denied"
-          }
-        ]
-      }
+        {
+            "id": "1",
+            "policy_id": "05A",
+            "description": "Deny access",
+            "assigned_to": "6",
+            "actions": [
+                {
+                    "resource_id": "HT456",
+                    "resource": "investigation",
+                    "type": "read",
+                    "attributes": {
+                        "type": "HT",
+                        "suburb": "N/A",
+                        "city": "N/A",
+                        "state": "N/A"
+                    },
+                    "expected_outcome": "denied"
+                },
+                {
+                    "resource_id": "DTIP33",
+                    "resource": "investigation",
+                    "type": "read",
+                    "attributes": {
+                        "type": "DTIP",
+                        "suburb": "Paddington",
+                        "city": "Brisbane",
+                        "state": "QLD"
+                    },
+                    "expected_outcome": "denied_access"
+                }
+            ],
+            "result": false
+        },
+        {
+            "id": "2",
+            "policy_id": "07B",
+            "description": "Deny Action",
+            "assigned_to": "6",
+            "actions": [
+                {
+                    "resource_id": "EDTIP3322",
+                    "resource": "evidence",
+                    "type": "investigation",
+                    "attributes": {
+                        "investigation": "DTIP33",
+                        "department": "forensic"
+                    },
+                    "expected_outcome": "deny"
+                },
+                {
+                    "resource_id": "EHIC4643",
+                    "resource": "evidence",
+                    "type": "investigation",
+                    "attributes": {
+                        "investigation": "HIC46",
+                        "department": "forensic"
+                    },
+                    "expected_outcome": "Deny"
+                }
+            ],
+            "result": false
+        },
+        {
+            "id": "3",
+            "policy_id": "05A",
+            "description": "just a test",
+            "assigned_to": "10",
+            "actions": [
+                {
+                    "resource_id": "EFCI6554",
+                    "resource": "evidence",
+                    "type": "HI",
+                    "attributes": {
+                        "investigation": "FCI65",
+                        "department": "information-technology"
+                    },
+                    "expected_outcome": "Deny"
+                }
+            ],
+            "result": false
+        },
+        {
+            "id": "4",
+            "policy_id": "10C",
+            "description": "Shawn Holden denied access to HIM76",
+            "assigned_to": "11",
+            "actions": [
+                {
+                    "resource_id": "HIM76",
+                    "resource": "investigation",
+                    "type": "read",
+                    "attributes": {
+                        "type": "HI",
+                        "suburb": "Manly",
+                        "city": "Sydney",
+                        "state": "NSW"
+                    },
+                    "expected_outcome": "denied"
+                }
+            ],
+            "result": false
+        },
+        {
+            "id": "5",
+            "policy_id": "10C",
+            "description": "Give Access to investigation",
+            "assigned_to": "12",
+            "actions": [
+                {
+                    "resource_id": "HIM76",
+                    "resource": "investigation",
+                    "type": "access",
+                    "attributes": {
+                        "type": "HI",
+                        "suburb": "Manly",
+                        "city": "Sydney",
+                        "state": "NSW"
+                    },
+                    "expected_outcome": "access"
+                }
+            ],
+            "result": false
+        }
     ]
-  }
+}

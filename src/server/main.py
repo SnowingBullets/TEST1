@@ -62,9 +62,9 @@ def load_policies():
         policies = json.load(file)
         logging.info('Loaded policies: %s', policies)
         return policies
-    
+
 def load_data_from_csv():
-    logging.debug("Loading policies from config/policies.csv")
+    logging.debug("Loading policies from config/data.csv")
     policies = []
     with open('config/data.csv', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -103,12 +103,12 @@ def process_tasks_to_csv():
 
 def enforce_policies_from_csv():
     policies = load_data_from_csv()
-    
+
     for action in policies:
         resource = action.get('resource', '')
         if not isinstance(resource, str):
             resource = str(resource)
-        
+
         enforce_action(Equal(resource), action)
 
 def enforce_action(resource, action):
@@ -144,7 +144,7 @@ class PolicyStore:
                 return policy
         logging.warning(f"No policy found with ID: {policy_id}")
         return None
-      
+
 class ClientController:
     def __init__(self, user_data, tasks, policy_store):
         self.users = user_data
@@ -157,17 +157,17 @@ class ClientController:
             fieldnames = ['Task ID', 'User Name', 'Policy ID', 'Resource ID', 'Policy Effect', 'Action Type', 'Resource', 'Attributes', 'Conditions', 'Expected Outcome']
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()
-            
+
             for task in self.tasks:
                 user = next((user for user in self.users if user['id'] == task['assigned_to']), None)
                 user_name = user['name'] if user else 'Unknown User'
-                
+
                 policy = self.policy_store.get_policy(task['policy_id'])
                 policy_effect = policy.effect if policy else 'No Policy Found'
-                
+
                 for action in task.get('actions', []):
                     attributes = json.dumps(action['attributes'])
-                    
+
                     writer.writerow({
                         'Task ID': task['id'],
                         'User Name': user_name,

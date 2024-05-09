@@ -4,4 +4,5 @@ Task ID,User Name,Policy ID,Resource ID,Policy Effect,Action Type,Resource,Attri
 2,Hilary Pham,07B,,allow,investigation,evidence,"{""investigation"": ""DTIP33"", ""department"": ""forensic""}",,deny
 2,Hilary Pham,07B,,allow,investigation,evidence,"{""investigation"": ""HIC46"", ""department"": ""forensic""}",,Deny
 3,Randy Flores,05A,,deny,HI,evidence,"{""investigation"": ""FCI65"", ""department"": ""information-technology""}",,Deny
-4,Shawn Holden,08C,,deny,read,investigation,"{""type"": ""HI"", ""suburb"": ""Clackson"", ""city"": ""Brisbane"", ""state"": ""QLD""}",,denied
+4,Shawn Holden,10C,,deny,read,investigation,"{""type"": ""HI"", ""suburb"": ""Manly"", ""city"": ""Sydney"", ""state"": ""NSW""}",,denied
+5,Martha Wang,10C,,deny,access,investigation,"{""type"": ""HI"", ""suburb"": ""Manly"", ""city"": ""Sydney"", ""state"": ""NSW""}",,access
