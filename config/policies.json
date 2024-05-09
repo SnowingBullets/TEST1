@@ -464,5 +464,413 @@
         "eq": "local"
       }
     }
-  }
+  },
+  {
+    "id": "08C",
+    "description": "Deny access to investigation resources if the user's access level is less than the required access level",
+    "effect": "deny",
+    "resource": {
+      "category": "investigation",
+      "id": "*"
+    },
+    "action": {
+      "eq": "*"
+    },
+    "subject": {
+      "access": {
+        "lt": 4
+      }
+    }
+  },
+    {
+      "id": "10C",
+      "description": "Deny access to investigation resource HIM76 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "HIM76"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+    {
+      "id": "11C",
+      "description": "Deny access to investigation resource SOCB56 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "SOCB56"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 3
+        }
+      }
+    },
+    {
+      "id": "12C",
+      "description": "Deny access to investigation resource DTIP33 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "DTIP33"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 3
+        }
+      }
+    },
+    {
+      "id": "13C",
+      "description": "Deny access to investigation resource FCI65 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "FCI65"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 5
+        }
+      }
+    },
+    {
+      "id": "14C",
+      "description": "Deny access to investigation resource CTI555 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "CTI555"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+    {
+      "id": "15C",
+      "description": "Deny access to investigation resource HT456 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "HT456"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 4
+        }
+      }
+    },
+    {
+      "id": "16C",
+      "description": "Deny access to investigation resource SOCI43 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "SOCI43"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 1
+        }
+      }
+    },
+    {
+      "id": "17C",
+      "description": "Deny access to investigation resource CIBB44 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "CIBB44"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 3
+        }
+      }
+    },
+    {
+      "id": "18C",
+      "description": "Deny access to investigation resource BPI89 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "BPI89"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+    {
+      "id": "19C",
+      "description": "Deny access to investigation resource EI56 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "EI56"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 4
+        }
+      }
+    },
+    {
+      "id": "20C",
+      "description": "Deny access to investigation resource MLI22 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "investigation",
+        "id": "MLI22"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 1
+        }
+      }
+    },
+    {
+      "id": "21C",
+      "description": "Deny access to evidence resource EDTIP3322 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "EDTIP3322"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 3
+        }
+      }
+    },
+    {
+      "id": "22C",
+      "description": "Deny access to evidence resource EFCI6554 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "EFCI6554"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 4
+        }
+      }
+    },
+    {
+      "id": "23C",
+      "description": "Deny access to evidence resource ECIB4476 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "ECIB4476"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+    {
+      "id": "24C",
+      "description": "Deny access to evidence resource ESOCI4333 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "ESOCI4333"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 1
+        }
+      }
+    },
+    {
+      "id": "25C",
+      "description": "Deny access to evidence resource ESOCI4354 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "ESOCI4354"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+    {
+      "id": "26C",
+      "description": "Deny access to evidence resource EHIC5487 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "EHIC5487"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 4
+        }
+      }
+    },
+    {
+      "id": "27C",
+      "description": "Deny access to evidence resource EHIC4643 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "evidence",
+        "id": "EHIC4643"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 3
+        }
+      }
+    },
+    {
+      "id": "28C",
+      "description": "Deny access to emergency response resource ERBT45 if the user's access level is less than the required access level",
+      "effect": "deny",
+      "resource": {
+        "category": "emergency-response",
+        "id": "ERBT45"
+      },
+      "action": {
+        "eq": "*"
+      },
+      "subject": {
+        "access": {
+          "lt": 2
+        }
+      }
+    },
+      {
+        "id": "29C",
+        "description": "Deny access to emergency response resource ERSHI4 if the user's access level is less than the required access level",
+        "effect": "deny",
+        "resource": {
+          "category": "emergency-response",
+          "id": "ERSHI4"
+        },
+        "action": {
+          "eq": "*"
+        },
+        "subject": {
+          "access": {
+            "lt": 1
+          }
+        }
+      },
+      {
+        "id": "30C",
+        "description": "Deny access to emergency response resource ERTA58 if the user's access level is less than the required access level",
+        "effect": "deny",
+        "resource": {
+          "category": "emergency-response",
+          "id": "ERTA58"
+        },
+        "action": {
+          "eq": "*"
+        },
+        "subject": {
+          "access": {
+            "lt": 5
+          }
+        }
+      },
+      {
+        "id": "31C",
+        "description": "Deny access to emergency response resource ERND6 if the user's access level is less than the required access level",
+        "effect": "deny",
+        "resource": {
+          "category": "emergency-response",
+          "id": "ERND6"
+        },
+        "action": {
+          "eq": "*"
+        },
+        "subject": {
+          "access": {
+            "lt": 3
+          }
+        }
+      },
+      {
+        "id": "32C",
+        "description": "Deny access to emergency response resource ERND7 if the user's access level is less than the required access level",
+        "effect": "deny",
+        "resource": {
+          "category": "emergency-response",
+          "id": "ERND7"
+        },
+        "action": {
+          "eq": "*"
+        },
+        "subject": {
+          "access": {
+            "lt": 2
+          }
+        }
+      } 
 ]

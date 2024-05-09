@@ -32,12 +32,12 @@ def stop_interface():
         print("Interface is not running.")
 
 def command_handler():
-    print("Type 'start interface' to start the interface, 'end interface' to stop the interface, or 'exit' to quit.")
+    print("Type 'start interface' to start the interface, 'stop interface' to stop the interface, or 'exit' to quit.")
     while True:
         command = input("Enter command: ").strip().lower()
         if command == 'start interface':
             start_interface()
-        elif command == 'end interface':
+        elif command == 'stop interface':
             stop_interface()
         elif command == 'exit':
             stop_interface()  # Ensure the interface is stopped before exiting
@@ -63,10 +63,10 @@ def load_policies():
         logging.info('Loaded policies: %s', policies)
         return policies
     
-def load_policies_from_csv():
+def load_data_from_csv():
     logging.debug("Loading policies from config/policies.csv")
     policies = []
-    with open('config/policies.csv', 'r') as csvfile:
+    with open('config/data.csv', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             policies.append(row)
@@ -102,16 +102,16 @@ def process_tasks_to_csv():
                 })
 
 def enforce_policies_from_csv():
-    policies = load_policies_from_csv()
+    policies = load_data_from_csv()
     
-    for policy in policies:
-        resource = policy.get('resource', '')
+    for action in policies:
+        resource = action.get('resource', '')
         if not isinstance(resource, str):
             resource = str(resource)
         
-        enforce_policy(Equal(resource), policy)
+        enforce_action(Equal(resource), action)
 
-def enforce_policy(resource, policy):
+def enforce_action(resource, action):
     # Your policy enforcement logic here
     pass
 
