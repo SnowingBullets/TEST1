@@ -4,7 +4,13 @@ from policies import PolicyStore
 from vakt import Policy, Inquiry, Guard, RulesChecker
 from vakt.storage.memory import MemoryStorage
 from socketserver import BaseRequestHandler, ThreadingTCPServer
+from vakt.rules.base import Rule
 from vakt_util import log_event, policy_to_vakt, update_task_result
+
+# Define custom rule for access level checking
+class AccessLevelRule(Rule):
+    def satisfied(self, what, inquiry):
+        return inquiry.subject.get('access_level', 0) >= what
 
 # Load policies
 with open('config/policies.json', 'r') as file:
@@ -47,6 +53,16 @@ with open('config/tasks.json', 'r') as file:
 with open('config/users.json', 'r') as file:
     users_data = json.load(file)
 
+# Load resources
+with open('config/resources.json', 'r') as file:
+    resources_data = json.load(file)
+
+def get_resource_access_level(resource_id):
+    for resource in resources_data['resources']:
+        if resource['id'] == resource_id:
+            return resource.get('access_level', 0)
+    return 0
+
 def log_policies(storage):
     policies = storage.get_all(limit=100, offset=0)
     for policy in policies:
@@ -54,12 +70,23 @@ def log_policies(storage):
 
 for task in tasks_data["tasks"]:
     user_id = task["assigned_to"]
-    user_name = next((user["name"] for user in users_data["users"] if user["id"] == str(user_id)), "unknown")
+    user_info = next((user for user in users_data["users"] if user["id"] == str(user_id)), {})
+    user_name = user_info.get("name", "unknown")
+    user_access_level = user_info.get("access_level", 0)
     action = task["actions"][0]["type"]
     resource = task["actions"][0]["resource_id"]
+    resource_access_level = get_resource_access_level(resource)
 
-    inquiry = Inquiry(action=action, resource=resource, subject={'name': user_name})
-    result = guard.is_allowed(inquiry)
+    # Custom access level check
+    logging.info(f"Checking custom access levels: User {user_name} (access level {user_access_level}) vs Resource {resource} (required access level {resource_access_level})")
+    if user_access_level < resource_access_level:
+        result = False
+        logging.info(f"Custom check failed: User {user_name} with access level {user_access_level} denied access to {resource} requiring level {resource_access_level}")
+    else:
+        inquiry = Inquiry(action=action, resource=resource, subject={'name': user_name, 'access_level': user_access_level})
+        logging.info(f"Creating inquiry: {inquiry}")
+        result = guard.is_allowed(inquiry)
+        logging.info(f"Inquiry result: {'allowed' if result else 'denied'}")
 
     log_event(user_name, resource, action, "allowed" if result else "denied")
 
@@ -67,7 +94,7 @@ for task in tasks_data["tasks"]:
         logging.info(f"Inquiry allowed: User: {user_name}, Resource: {resource}, Action: {action}")
     else:
         logging.info(f"Inquiry denied: User: {user_name}, Resource: {resource}, Action: {action}")
-        logging.info(f"Inquiry details: {inquiry}")
+        logging.info(f"Inquiry details: {Inquiry}")
         logging.info(f"Policies in storage:")
         log_policies(storage)
 

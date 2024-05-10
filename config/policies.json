@@ -57,7 +57,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "lt": 3
       }
     },
@@ -102,7 +102,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "lt": 3
       }
     }
@@ -131,7 +131,7 @@
       "neq": "close"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "eq": 5
       }
     }
@@ -148,7 +148,7 @@
       "eq": "close"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "eq": 5
       },
       "task-force": "case-id"
@@ -174,7 +174,7 @@
       "eq": "read"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 4
       }
     },
@@ -196,7 +196,7 @@
       "eq": "open"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 4
       },
       "task-force": {
@@ -216,7 +216,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "lt": 4
       }
     },
@@ -241,7 +241,7 @@
       ]
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 3
       },
       "task-force": {
@@ -261,7 +261,7 @@
       "eq": "open"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 1
       },
       "task-force": {
@@ -310,7 +310,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "eq": 5
       }
     }
@@ -327,7 +327,7 @@
       "eq": "add"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 4
       },
       "task-force": {
@@ -347,7 +347,7 @@
       "eq": "retrieve"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 4
       },
       "task-force": {
@@ -367,7 +367,7 @@
       "eq": "retrieve"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 3
       },
       "department": "evidence-department"
@@ -385,7 +385,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 5
       }
     },
@@ -407,7 +407,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "lt": 5
       },
       "department": {
@@ -427,7 +427,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 4
       },
       "department": {
@@ -452,7 +452,7 @@
       "eq": "write"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "geq": 3
       },
       "department": {
@@ -477,7 +477,7 @@
       "eq": "*"
     },
     "subject": {
-      "access": {
+      "access_level": {
         "lt": 4
       }
     }
@@ -485,7 +485,7 @@
     {
       "id": "10C",
       "description": "Deny access to investigation resource HIM76 if the user's access level is less than the required access level",
-      "effect": "deny",
+      "effect": "allow",
       "resource": {
         "category": "investigation",
         "id": "HIM76"
@@ -494,8 +494,8 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
-          "lt": 2
+        "access_level": {
+          "lt": 5
         }
       }
     },
@@ -511,7 +511,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 3
         }
       }
@@ -528,7 +528,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 3
         }
       }
@@ -545,7 +545,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 5
         }
       }
@@ -562,7 +562,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 2
         }
       }
@@ -579,7 +579,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 4
         }
       }
@@ -596,7 +596,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 1
         }
       }
@@ -613,7 +613,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 3
         }
       }
@@ -630,7 +630,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 2
         }
       }
@@ -647,7 +647,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 4
         }
       }
@@ -664,7 +664,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 1
         }
       }
@@ -681,7 +681,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 3
         }
       }
@@ -698,7 +698,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 4
         }
       }
@@ -715,7 +715,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 2
         }
       }
@@ -732,7 +732,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 1
         }
       }
@@ -749,7 +749,7 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
+        "access_level": {
           "lt": 2
         }
       }
@@ -766,111 +766,43 @@
         "eq": "*"
       },
       "subject": {
-        "access": {
-          "lt": 4
+        "access_level": {
+          "lt": 5
         }
       }
     },
     {
       "id": "27C",
-      "description": "Deny access to evidence resource EHIC4643 if the user's access level is less than the required access level",
+      "description": "Deny access to evidence resource EHT4566 if the user's access level is less than the required access level",
       "effect": "deny",
       "resource": {
         "category": "evidence",
-        "id": "EHIC4643"
+        "id": "EHT4566"
       },
       "action": {
         "eq": "*"
       },
       "subject": {
-        "access": {
-          "lt": 3
+        "access_level": {
+          "lt": 4
         }
       }
     },
     {
       "id": "28C",
-      "description": "Deny access to emergency response resource ERBT45 if the user's access level is less than the required access level",
+      "description": "Deny access to evidence resource ETI5554 if the user's access level is less than the required access level",
       "effect": "deny",
       "resource": {
-        "category": "emergency-response",
-        "id": "ERBT45"
+        "category": "evidence",
+        "id": "ETI5554"
       },
       "action": {
         "eq": "*"
       },
       "subject": {
-        "access": {
-          "lt": 2
+        "access_level": {
+          "lt": 3
         }
       }
-    },
-      {
-        "id": "29C",
-        "description": "Deny access to emergency response resource ERSHI4 if the user's access level is less than the required access level",
-        "effect": "deny",
-        "resource": {
-          "category": "emergency-response",
-          "id": "ERSHI4"
-        },
-        "action": {
-          "eq": "*"
-        },
-        "subject": {
-          "access": {
-            "lt": 1
-          }
-        }
-      },
-      {
-        "id": "30C",
-        "description": "Deny access to emergency response resource ERTA58 if the user's access level is less than the required access level",
-        "effect": "deny",
-        "resource": {
-          "category": "emergency-response",
-          "id": "ERTA58"
-        },
-        "action": {
-          "eq": "*"
-        },
-        "subject": {
-          "access": {
-            "lt": 5
-          }
-        }
-      },
-      {
-        "id": "31C",
-        "description": "Deny access to emergency response resource ERND6 if the user's access level is less than the required access level",
-        "effect": "deny",
-        "resource": {
-          "category": "emergency-response",
-          "id": "ERND6"
-        },
-        "action": {
-          "eq": "*"
-        },
-        "subject": {
-          "access": {
-            "lt": 3
-          }
-        }
-      },
-      {
-        "id": "32C",
-        "description": "Deny access to emergency response resource ERND7 if the user's access level is less than the required access level",
-        "effect": "deny",
-        "resource": {
-          "category": "emergency-response",
-          "id": "ERND7"
-        },
-        "action": {
-          "eq": "*"
-        },
-        "subject": {
-          "access": {
-            "lt": 2
-          }
-        }
-      } 
+    }
 ]
