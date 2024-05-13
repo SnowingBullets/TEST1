@@ -104,7 +104,7 @@
         },
         {
             "id": "5",
-            "policy_id": "10C",
+            "policy_id": "10A",
             "description": "Give Access to investigation",
             "assigned_to": "12",
             "actions": [

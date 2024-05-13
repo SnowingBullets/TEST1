@@ -73,8 +73,7 @@
         "suburb": "Clackson",
         "city": "Brisbane",
         "state": "QLD"
-      },
-      "access_level": 4
+      }
     },
     {
       "id": "HIM76",
@@ -84,8 +83,7 @@
         "suburb": "Manly",
         "city": "Sydney",
         "state": "NSW"
-      },
-      "access_level": 5
+      }
     },
     {
       "id": "SOCB56",
@@ -95,8 +93,7 @@
         "suburb": "Brighton",
         "city": "Melbourne",
         "state": "VIC"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "DTIP33",
@@ -106,8 +103,7 @@
         "suburb": "Paddington",
         "city": "Brisbane",
         "state": "QLD"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "FCI65",
@@ -117,8 +113,7 @@
         "suburb": "Cottesloe",
         "city": "Perth",
         "state": "WA"
-      },
-      "access_level": 5
+      }
     },
     {
       "id": "CTI555",
@@ -128,8 +123,7 @@
         "suburb": "N/A",
         "city": "N/A",
         "state": "N/A"
-      },
-      "access_level": 2
+      }
     },
     {
       "id": "HT456",
@@ -139,8 +133,7 @@
         "suburb": "N/A",
         "city": "N/A",
         "state": "N/A"
-      },
-      "access_level": 4
+      }
     },
     {
       "id": "SOCI43",
@@ -150,8 +143,7 @@
         "suburb": "Bradley",
         "city": "Perth",
         "state": "WA"
-      },
-      "access_level": 1
+      }
     },
     {
       "id": "CIBB44",
@@ -161,8 +153,7 @@
         "suburb": "Bondi Beach",
         "city": "Sydney",
         "state": "NSW"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "BPI89",
@@ -172,8 +163,7 @@
         "suburb": "N/A",
         "city": "N/A",
         "state": "N/A"
-      },
-      "access_level": 2
+      }
     },
     {
       "id": "EI56",
@@ -183,8 +173,7 @@
         "suburb": "South Yarra",
         "city": "Melbourne",
         "state": "VIC"
-      },
-      "access_level": 4
+      }
     },
     {
       "id": "MLI22",
@@ -194,8 +183,7 @@
         "suburb": "Fortitude Valley",
         "city": "Brisbane",
         "state": "QLD"
-      },
-      "access_level": 1
+      }
     },
     {
       "id": "EDTIP3322",
@@ -203,8 +191,7 @@
       "attributes": {
         "investigation": "DTIP33",
         "department": "forensic"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "EFCI6554",
@@ -212,8 +199,7 @@
       "attributes": {
         "investigation": "FCI65",
         "department": "information-technology"
-      },
-      "access_level": 4
+      }
     },
     {
       "id": "ECIB4476",
@@ -221,8 +207,7 @@
       "attributes": {
         "investigation": "CIBB44",
         "department": "information-technology"
-      },
-      "access_level": 2
+      }
     },
     {
       "id": "ESOCI4333",
@@ -230,8 +215,7 @@
       "attributes": {
         "investigation": "SOCI43",
         "department": "forensic"
-      },
-      "access_level": 1
+      }
     },
     {
       "id": "ESOCI4354",
@@ -239,8 +223,7 @@
       "attributes": {
         "investigation": "SOCI43",
         "department": "information-technology"
-      },
-      "access_level": 2
+      }
     },
     {
       "id": "EHIC5487",
@@ -248,8 +231,7 @@
       "attributes": {
         "investigation": "HIC45",
         "department": "forensic"
-      },
-      "access_level": 4
+      }
     },
     {
       "id": "EHIC4643",
@@ -257,8 +239,7 @@
       "attributes": {
         "investigation": "HIC46",
         "department": "forensic"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "ERBT45",
@@ -268,8 +249,7 @@
         "suburb": "Byron Bay",
         "city": "Byron Shire",
         "state": "NSW"
-      },
-      "access_level": 2
+      }
     },
     {
       "id": "ERSHI4",
@@ -279,8 +259,7 @@
         "suburb": "Fremantle",
         "city": "Perth",
         "state": "WA"
-      },
-      "access_level": 1
+      }
     },
     {
       "id": "ERTA58",
@@ -290,8 +269,7 @@
         "suburb": "Bendle",
         "city": "Perth",
         "state": "WA"
-      },
-      "access_level": 5
+      }
     },
     {
       "id": "ERND6",
@@ -301,8 +279,7 @@
         "suburb": "Nagonmi",
         "city": "Denpasar",
         "state": "Bali"
-      },
-      "access_level": 3
+      }
     },
     {
       "id": "ERND7",
@@ -312,8 +289,7 @@
         "suburb": "Hobart CBD",
         "city": "Hobart",
         "state": "Tasmania"
-      },
-      "access_level": 2
+      }
     }
   ]
 }
